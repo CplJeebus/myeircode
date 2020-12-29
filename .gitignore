@@ -1,1 +1,13 @@
 src/myeircode/myeircode
+codes.yml
+google-key.json
+src/cloud.google.com/
+src/github.com/
+src/go.opencensus.io/
+src/golang.org/
+src/google.golang.org/
+pkg
+src/myeircode/build-all.sh
+src/myeircode/build.sh
+src/myeircode/config.yml
+
