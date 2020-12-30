@@ -15,16 +15,22 @@ getLatestTag(){
 }
 
 dockerStuff(){
-  latest=$(getLatestTag)
+  latest=$1
   base="${GCR_BASE}"
   
   docker build --tag ${base}:${latest} .
   docker push ${base}:${latest}
 }
 
+deploy(){
+gcloud run services update myeircode --platform managed --image ${GCR_BASE}:${1} --region europe-west1
+}
+
 main(){
   buildServer
-  dockerStuff
+  tag=$(getLatestTag)
+  dockerStuff $tag
+  deploy $tag
 }
 
 main "@"
