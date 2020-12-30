@@ -8,8 +8,7 @@ src/go.opencensus.io/
 src/golang.org/
 src/google.golang.org/
 pkg
-src/myeircode/build-all.sh
-src/myeircode/build.sh
 src/myeircode/config.yaml
 src/gopkg.in/
 src/myeircode/utils/
+src/myeircode/.envrc
