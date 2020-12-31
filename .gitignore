@@ -10,5 +10,4 @@ src/google.golang.org/
 pkg
 src/myeircode/config.yaml
 src/gopkg.in/
-src/myeircode/utils/
 src/myeircode/.envrc
