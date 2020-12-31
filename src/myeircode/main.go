@@ -16,12 +16,7 @@ func main() {
 }
 
 func ShowCodes(w http.ResponseWriter, r *http.Request) {
-	b, err := DownloadFile(c.Bucket, "codes.yml")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	fmt.Fprintf(w, string(b))
+	fmt.Fprintf(w, Pretty)
 }
 
 func ShowJson(w http.ResponseWriter, r *http.Request) {
