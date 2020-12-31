@@ -5,9 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"time"
 
 	"cloud.google.com/go/storage"
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
+
 	yaml "gopkg.in/yaml.v2"
 )
 
@@ -46,7 +50,27 @@ const Pretty = `<!DOCTYPE html>
 </html>`
 
 type Config struct {
-	Bucket string `yaml:"bucket"`
+	Bucket  string `yaml:"bucket"`
+	MailKey string `yaml:"mailApiKey"`
+	Admin   string `yaml:"adminMail"`
+}
+
+func SendMail(w http.ResponseWriter, r *http.Request, email string, key string) {
+	from := mail.NewEmail("My Eircode", email)
+	subject := "Test Message"
+	to := mail.NewEmail("Admin", email)
+	plainTextContent := "This is a test message"
+	htmlContent := "<strong>And has html for some reason</strong>"
+	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient(key)
+
+	response, err := client.Send(message)
+	if err != nil {
+		log.Println(err)
+	} else {
+		fmt.Fprintf(w, string(response.StatusCode))
+		fmt.Fprintf(w, response.Body)
+	}
 }
 
 func (c *Config) LoadConfig() *Config {

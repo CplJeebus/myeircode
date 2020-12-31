@@ -10,6 +10,7 @@ var c Config
 
 func main() {
 	c.LoadConfig()
+	http.HandleFunc("/mailtest", func(w http.ResponseWriter, r *http.Request) { SendMail(w, r, c.Admin, c.MailKey) })
 	http.HandleFunc("/", ShowCodes)
 	http.HandleFunc("/api", ShowJson)
 	http.ListenAndServe(":8080", nil)
