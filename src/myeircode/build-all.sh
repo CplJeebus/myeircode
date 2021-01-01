@@ -3,8 +3,8 @@
 set -e 
 
 buildServer(){
-  export GOOS=linux
-  export GOARCH=amd64
+    export GOOS=linux
+    export GOARCH=amd64
 
   go build -o myeircode
 }
@@ -23,14 +23,22 @@ dockerStuff(){
 }
 
 deploy(){
-gcloud run services update myeircode --platform managed --image ${GCR_BASE}:${1} --region europe-west1
+  case $1 in 
+  deploy)
+    gcloud run services update myeircode --platform managed --image ${GCR_BASE}:${2} --region europe-west1
+    ;;
+  local)
+    docker container rm $(docker container ls -a | grep local | awk '{print $1}') || true
+    docker run -p 8080:8080 --name local ${GCR_BASE}:${2} 
+    ;;
+  esac
 }
 
 main(){
-  buildServer
+  buildServer 
   tag=$(getLatestTag)
   dockerStuff $tag
-  deploy $tag
+  deploy $1 $tag
 }
 
-main "@"
+main "$@"
