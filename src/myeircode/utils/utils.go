@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"time"
 
 	"cloud.google.com/go/storage"
@@ -49,27 +48,50 @@ const Pretty = `<!DOCTYPE html>
 </body>
 </html>`
 
+const PrettyForm = `<!DOCTYPE html>
+<html>
+<body>
+
+<h3>New Code</h3>
+
+<form method="POST" action="/new">
+  <label for="fname">Who is it:</label><br>
+  <input type="text" id="name" name="name" value=""><br>
+  <label for="lname">Code:</label><br>
+  <input type="text" id="code" name="code" value=""><br><br>
+  <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>`
+
 type Config struct {
 	Bucket  string `yaml:"bucket"`
 	MailKey string `yaml:"mailApiKey"`
 	Admin   string `yaml:"adminMail"`
+	Host    string `yaml:"host"`
 }
 
-func SendMail(w http.ResponseWriter, r *http.Request, email string, key string) {
-	from := mail.NewEmail("My Eircode", email)
-	subject := "Test Message"
-	to := mail.NewEmail("Admin", email)
+type Code struct {
+	Name string `json:"name"`
+	Code string `json:"code"`
+}
+
+func SendMail(c Config, uuid string) {
+	from := mail.NewEmail("My Eircode", c.Admin)
+	subject := "Change waiting for approval"
+	to := mail.NewEmail("Admin", c.Admin)
 	plainTextContent := "This is a test message"
-	htmlContent := "<strong>And has html for some reason</strong>"
+	htmlContent := "Click code to authorize https://" + c.Host + "/auth?id=" + uuid + " </strong>"
 	message := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-	client := sendgrid.NewSendClient(key)
+	client := sendgrid.NewSendClient(c.MailKey)
 
 	response, err := client.Send(message)
 	if err != nil {
 		log.Println(err)
 	} else {
-		fmt.Fprintf(w, string(response.StatusCode))
-		fmt.Fprintf(w, response.Body)
+		fmt.Printf(fmt.Sprint(response.StatusCode))
+		fmt.Printf(response.Body)
 	}
 }
 
