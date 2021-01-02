@@ -16,7 +16,8 @@ func main() {
 	c.LoadConfig()
 	http.HandleFunc("/", ShowCodes)
 	http.HandleFunc("/api", ShowJson)
-	http.HandleFunc("/new", NewCode)
+	http.HandleFunc("/new", AddCode)
+	http.HandleFunc("/auth", Auth)
 	http.ListenAndServe(":8080", nil)
 }
 
@@ -24,7 +25,28 @@ func ShowCodes(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, Pretty)
 }
 
-func NewCode(w http.ResponseWriter, r *http.Request) {
+func Auth(w http.ResponseWriter, r *http.Request) {
+	CurrentBytes, _ := DownloadFile(c.Bucket, "codes.json")
+	var CurrentCodes []Code
+	var Staged Code
+
+	e := json.Unmarshal(CurrentBytes, &CurrentCodes)
+	if e != nil {
+		fmt.Println(e)
+	}
+
+	q := r.URL.Query()
+	u := q.Get("id")
+
+	StagedBytes, _ := ioutil.ReadFile(u + ".json")
+	e = json.Unmarshal(StagedBytes, &Staged)
+	CurrentCodes = append(CurrentCodes, Staged)
+	out, _ := json.Marshal(CurrentCodes)
+	SaveCodes(c.Bucket, "codes.json", out)
+
+}
+
+func AddCode(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		fmt.Fprintf(w, PrettyForm)
@@ -40,6 +62,7 @@ func NewCode(w http.ResponseWriter, r *http.Request) {
 		}
 		u, e := uuid.NewV4()
 		fn := u.String()
+		fmt.Println(fn)
 		e = ioutil.WriteFile(fn+".json", f, 0644)
 		SendMail(c, fn)
 

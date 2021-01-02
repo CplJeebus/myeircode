@@ -137,3 +137,29 @@ func DownloadFile(bucket string, object string) ([]byte, error) {
 
 	return data, nil
 }
+
+func SaveCodes(bucket string, object string, codes []byte) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		fmt.Errorf("storage.NewClient: %w", err)
+	}
+
+	defer cancel()
+
+	ctx, cancel = context.WithTimeout(ctx, time.Second*10)
+	defer cancel()
+
+	wc := client.Bucket(bucket).Object(object).NewWriter(ctx)
+	if err != nil {
+		fmt.Errorf("Object(%q).NewReader: %w", object, err)
+	}
+	defer wc.Close()
+	wc.ContentType = "text/plain"
+	_, e := wc.Write(codes)
+	if e != nil {
+		fmt.Println(e)
+	}
+
+}
