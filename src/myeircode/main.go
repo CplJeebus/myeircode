@@ -15,22 +15,13 @@ var c Config
 
 func main() {
 	c.LoadConfig()
-	http.HandleFunc("/", CheckTLS(ShowCodes))
+	http.HandleFunc("/", ShowCodes)
 	http.HandleFunc("/api", ShowJson)
 	http.HandleFunc("/new", AddCode)
 	http.HandleFunc("/auth", Auth)
 	http.ListenAndServe(":8080", nil)
 }
 
-func CheckTLS(function http.HandlerFunc) http.HandlerFunc {
-	f := func(w http.ResponseWriter, req *http.Request) {
-		parts := strings.Split(req.URL.String(), ":")
-		if parts[0] == "http" {
-			http.Redirect(w, req, "https:"+parts[1], 301)
-		} else {
-			function(w, req)
-		}
-	}
 
 	return f
 }
