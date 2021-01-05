@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	. "myeircode/utils"
 	"net/http"
-	"strings"
+	"os"
 
 	uuid "github.com/nu7hatch/gouuid"
 )
@@ -20,10 +20,6 @@ func main() {
 	http.HandleFunc("/new", AddCode)
 	http.HandleFunc("/auth", Auth)
 	http.ListenAndServe(":8080", nil)
-}
-
-
-	return f
 }
 
 func ShowCodes(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +44,7 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	CurrentCodes = append(CurrentCodes, Staged)
 	out, _ := json.Marshal(CurrentCodes)
 	SaveCodes(c.Bucket, "codes.json", out)
+	e = os.Remove(u + ".json")
 
 }
 
@@ -68,7 +65,7 @@ func AddCode(w http.ResponseWriter, r *http.Request) {
 		u, e := uuid.NewV4()
 		fn := u.String()
 		fmt.Println(fn)
-		e = ioutil.WriteFile(fn+".json", f, 0644)
+		e = ioutil.WriteFile(fn+".json", f, 0600)
 		SendMail(c, fn)
 
 		fmt.Fprintf(w, "Wait for authorisation")
