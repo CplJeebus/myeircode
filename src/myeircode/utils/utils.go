@@ -90,8 +90,8 @@ func SendMail(c Config, uuid string) {
 	if err != nil {
 		log.Println(err)
 	} else {
-		fmt.Printf(fmt.Sprint(response.StatusCode))
-		fmt.Printf(response.Body)
+		fmt.Print(fmt.Sprint(response.StatusCode))
+		fmt.Print(response.Body)
 	}
 }
 
@@ -143,7 +143,7 @@ func SaveCodes(bucket string, object string, codes []byte) {
 
 	client, err := storage.NewClient(ctx)
 	if err != nil {
-		fmt.Errorf("storage.NewClient: %w", err)
+		fmt.Printf("storage.NewClient: %+v", err)
 	}
 
 	defer cancel()
@@ -152,14 +152,12 @@ func SaveCodes(bucket string, object string, codes []byte) {
 	defer cancel()
 
 	wc := client.Bucket(bucket).Object(object).NewWriter(ctx)
-	if err != nil {
-		fmt.Errorf("Object(%q).NewReader: %w", object, err)
-	}
+
 	defer wc.Close()
 	wc.ContentType = "text/plain"
+
 	_, e := wc.Write(codes)
 	if e != nil {
-		fmt.Println(e)
+		fmt.Printf("Can't write to bucket %+v", e)
 	}
-
 }
