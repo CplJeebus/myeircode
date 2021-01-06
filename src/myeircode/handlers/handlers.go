@@ -82,7 +82,7 @@ func AddCode(w http.ResponseWriter, r *http.Request) {
 
 		SendMail(c, fn)
 
-		fmt.Fprintf(w, "Wait for authorisation")
+		fmt.Fprintf(w, Wait)
 	default:
 		fmt.Fprintf(w, "Method not supported!")
 	}

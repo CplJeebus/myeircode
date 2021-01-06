@@ -14,57 +14,6 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-const Pretty = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Eircodes</title>
-</head>
-<body>
-    <div id="myData"></div>
-    <script>
-        fetch('/api')
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                appendData(data);
-            })
-            .catch(function (err) {
-                console.log('error: ' + err);
-            });
-
-        function appendData(data) {
-            var mainContainer = document.getElementById("myData");
-            for (var i = 0; i < data.length; i++) {
-                var div = document.createElement("div");
-								div.innerHTML = '<b>Name:</b> ' + data[i].name + '<br><b>Code:</b> ' + data[i].code + '<br>';
-                mainContainer.appendChild(div);
-            }
-        }
-    </script>
-</body>
-</html>`
-
-const PrettyForm = `<!DOCTYPE html>
-<html>
-<body>
-
-<h3>New Code</h3>
-
-<form method="POST" action="/new">
-  <label for="fname">Who is it:</label><br>
-  <input type="text" id="name" name="name" value=""><br>
-  <label for="lname">Code:</label><br>
-  <input type="text" id="code" name="code" value=""><br><br>
-  <input type="submit" value="Submit">
-</form>
-
-</body>
-</html>`
-
 type Config struct {
 	Bucket  string `yaml:"bucket"`
 	MailKey string `yaml:"mailApiKey"`
