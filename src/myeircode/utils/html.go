@@ -1,5 +1,17 @@
 package utils
 
+const style = `
+	<style type="text/css" media="screen"><!--
+		* { box-sizing: border-box; }
+		body {margin: 0; padding: 0; font-family: Verdana,Geneva,sans-serif;}
+		#outer { position: absolute; display: table; width: 100%; height: 99%; margin: 0 auto; }
+		#upper { display: table-row; width: 100%; height: 85%; }
+		#lower { display: table-row; width: 100%; height: 15%; max-height: 90px; }
+		#content { position: relative; display: table-cell; vertical-align: middle; text-align: center; }
+		#footer { position: relative; display: table-cell; vertical-align: bottom; text-align: center; }
+		.big { font-size: 36pt; }
+		--></style>
+`
 const Pretty = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,20 +63,33 @@ const PrettyForm = `<!DOCTYPE html>
 </body>
 </html>`
 
+const Challenge = `<!DOCTYPE html>
+<html>
+<head>` + style +
+	`</head>
+<body>
+
+<h3>Are you a Wynner?</h3>
+
+<strong>What was Uncle Georges dog called?</strong><br>
+<form method="POST" action="/challenge">
+
+  <input type="radio" name="challenge" value="Captain">
+  <label for="male">Captin</label><br>
+  <input type="radio" name="challenge" value="Major">
+  <label for="Major">Major</label><br>
+  <input type="radio" name="challenge" value="Sarge">
+  <label for="Sarge">Sarge</label>
+  <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>`
+
 const Wait = `<!DOCTYPE html>
 <html>
-<head>
-	<style type="text/css" media="screen"><!--
-		* { box-sizing: border-box; }
-		body {margin: 0; padding: 0; font-family: Verdana,Geneva,sans-serif;}
-		#outer { position: absolute; display: table; width: 100%; height: 99%; margin: 0 auto; }
-		#upper { display: table-row; width: 100%; height: 85%; }
-		#lower { display: table-row; width: 100%; height: 15%; max-height: 90px; }
-		#content { position: relative; display: table-cell; vertical-align: middle; text-align: center; }
-		#footer { position: relative; display: table-cell; vertical-align: bottom; text-align: center; }
-		.big { font-size: 36pt; }
-		--></style>
-</head>
+<head>` + style +
+	`</head>
 <body>
 <div id="outer">
 	<div id="upper">

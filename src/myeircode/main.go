@@ -10,7 +10,7 @@ var c Config
 
 func main() {
 	c.LoadConfig()
-	http.HandleFunc("/", h.ShowCodes)
+	http.HandleFunc("/", h.Challenge(h.ShowCodes))
 	http.HandleFunc("/api", h.ShowJSON)
 	http.HandleFunc("/new", h.AddCode)
 	http.HandleFunc("/auth", h.Auth)
