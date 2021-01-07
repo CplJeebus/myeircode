@@ -9,5 +9,8 @@ src/golang.org/
 src/google.golang.org/
 pkg
 src/myeircode/config.yaml
+src/myeircode/Xconfig.yaml
+src/myeircode/rhost
+src/myeircode/lhost
 src/gopkg.in/
 src/myeircode/.envrc

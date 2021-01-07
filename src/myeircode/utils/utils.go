@@ -15,10 +15,11 @@ import (
 )
 
 type Config struct {
-	Bucket  string `yaml:"bucket"`
-	MailKey string `yaml:"mailApiKey"`
-	Admin   string `yaml:"adminMail"`
-	Host    string `yaml:"host"`
+	Bucket    string `yaml:"bucket"`
+	MailKey   string `yaml:"mailApiKey"`
+	Admin     string `yaml:"adminMail"`
+	Host      string `yaml:"host"`
+	CookieKey string `yaml:"cookieKey"`
 }
 
 type Code struct {

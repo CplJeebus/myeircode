@@ -15,9 +15,14 @@ getLatestTag(){
 }
 
 dockerStuff(){
-  latest=$1
+  latest=$2
   base="${GCR_BASE}"
-  
+  if [ "$1" == "local" ] 
+  then 
+    gsed "s/host: \"TheHost\"/$(cat lhost)/g" Xconfig.yaml > config.yaml
+  else 
+    gsed "s/host: \"TheHost\"/$(cat rhost)/g" Xconfig.yaml > config.yaml 
+  fi 
   docker build --tag ${base}:${latest} .
   docker push ${base}:${latest}
 }
@@ -37,7 +42,7 @@ deploy(){
 main(){
   buildServer 
   tag=$(getLatestTag)
-  dockerStuff $tag
+  dockerStuff $1 $tag 
   deploy $1 $tag
 }
 

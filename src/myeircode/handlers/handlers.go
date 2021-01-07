@@ -95,21 +95,24 @@ func Challenge(function http.HandlerFunc) http.HandlerFunc {
 
 		switch r.Method {
 		case "GET":
-			q := r.URL.Query()
-			cid := q.Get("cid")
+			cookie, e := r.Cookie(c.CookieKey)
+			if e != nil {
+				fmt.Printf("Something with cookies %+v", e)
+				fmt.Fprintf(w, utils.Challenge)
+				break
+			}
 
-			if cid != "" {
-				_, e := ioutil.ReadFile(cid + ".tmp")
+			if cookie.Value != "" {
+				_, e := ioutil.ReadFile(cookie.Value + ".tmp")
 				if e != nil {
-					fmt.Printf("Could not validate CID file %v", e)
+					fmt.Printf("Could not validate cookie file %v", e)
+					fmt.Fprintf(w, utils.Challenge)
 				} else {
 					function(w, r)
 				}
 			}
-			fmt.Fprintf(w, utils.Challenge)
 		case "POST":
-
-			if r.FormValue("challenge") == "Major" {
+			if r.FormValue("challenge") == "Silly" {
 				cid, e := uuid.NewV4()
 				if e != nil {
 					fmt.Printf("[CID] Can't create a UUID for some god know reason %+v", e)
@@ -119,8 +122,8 @@ func Challenge(function http.HandlerFunc) http.HandlerFunc {
 				if e != nil {
 					fmt.Printf("Unable to write temp cid file %+v", e)
 				}
-
-				http.Redirect(w, r, "https://"+c.Host+"/?cid="+fmt.Sprint(cid), 301)
+				http.SetCookie(w, &http.Cookie{Name: c.CookieKey, Value: fmt.Sprint(cid)})
+				http.Redirect(w, r, "https://"+c.Host+"/", 301)
 			}
 		}
 	}

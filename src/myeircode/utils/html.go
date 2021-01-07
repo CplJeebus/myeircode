@@ -74,12 +74,12 @@ const Challenge = `<!DOCTYPE html>
 <strong>What was Uncle Georges dog called?</strong><br>
 <form method="POST" action="/challenge">
 
-  <input type="radio" name="challenge" value="Captain">
-  <label for="male">Captin</label><br>
-  <input type="radio" name="challenge" value="Major">
-  <label for="Major">Major</label><br>
-  <input type="radio" name="challenge" value="Sarge">
-  <label for="Sarge">Sarge</label>
+  <input type="radio" name="challenge" value="Silly">
+  <label for="Silly">Silly</label><br>
+  <input type="radio" name="challenge" value="Billy">
+  <label for="Billy">Billy</label><br>
+  <input type="radio" name="challenge" value="Jilly">
+  <label for="Jilly">Jilly</label><br>
   <input type="submit" value="Submit">
 </form>
 
